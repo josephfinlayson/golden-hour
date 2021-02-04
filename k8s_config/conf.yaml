@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: golden-hour
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: golden-hour
+          imagePullPolicy: Always
+          env:
+            - name: BOTTLE_ENV
+              value: production
+          image: registry.digitalocean.com/unmanaged-registry/golden-hour:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: 100m
+      nginx.org/client-max-body-size: "0"
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-production
+  name: golden-hour
+spec:
+  rules:
+    - host: golden-hour.hobby-paas.cf
+      http:
+        paths:
+         - path: /
+           backend:
+              service: 
+                name: golden-hour
+                port: 
+                  number: 8005      
+           pathType: Prefix
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: golden-hour
+spec:
+  ports:
+    - name: http
+      port: 8005
+      targetPort: 8080
+  selector:
+    app: legal-tooling-prototype
+  type: NodePort
