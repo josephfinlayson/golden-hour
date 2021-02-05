@@ -22,8 +22,6 @@ metadata:
   annotations:
       kubernetes.io/ingress.class: nginx
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/proxy-body-size: 100m
-      nginx.org/client-max-body-size: "0"
       nginx.ingress.kubernetes.io/use-regex: "true"
       cert-manager.io/cluster-issuer: letsencrypt-production
   name: golden-hour
@@ -39,6 +37,10 @@ spec:
                 port: 
                   number: 8005      
            pathType: Prefix
+  tls:
+  - hosts:
+      - golden-hour.hobby-paas.cf
+    secretName: letsencrypt-production
 ---
 apiVersion: v1
 kind: Service
