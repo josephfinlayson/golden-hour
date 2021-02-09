@@ -9,6 +9,10 @@ requests = "*"
 nptime = "*"
 pytest = "*"
 pytest-watch = "*"
+boddle = "*"
+flask = "*"
+opencv-python = "*"
+numpy = "*"
 
 [dev-packages]
 
