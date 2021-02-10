@@ -59,7 +59,8 @@ def post_story():
         size = (width,height)
         processed_img_array.append(img)
 
-    out = cv2.VideoWriter('project.mp4', cv2.VideoWriter_fourcc(*'MP4V'), 1, size)
+    frames_per_second = len(request.files.getlist('image')) / 10
+    out = cv2.VideoWriter('project.mp4', cv2.VideoWriter_fourcc(*'MP4V'), frames_per_second, size)
 
     for i in range(len(processed_img_array)) :
         out.write(processed_img_array[i])
