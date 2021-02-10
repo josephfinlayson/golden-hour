@@ -1,6 +1,10 @@
 from flask import Flask, Response, request, send_file
 from astral import LocationInfo
 from pprint import pprint
+from moviepy.video.VideoClip import TextClip
+from moviepy.editor import CompositeVideoClip
+
+from moviepy.video.io.VideoFileClip import VideoFileClip
 import requests
 from astral.sun import sun
 from datetime import datetime, timedelta
@@ -10,6 +14,7 @@ import cv2
 import numpy as np
 import glob
 from time import sleep
+from media import prepare_video
 
 
 app = Flask(__name__)
@@ -47,6 +52,8 @@ def create_opencv_image_from_stringio(img_stream, cv2_img_flag=0):
 @app.route('/post-story', methods = ['POST'])
 def post_story():
     images = request.files.get('image')
+    text = request.form.get('text')
+
     name, ext = os.path.splitext(images.filename)
 
     if ext not in ('.jpg','.jpeg'):
@@ -60,12 +67,21 @@ def post_story():
         processed_img_array.append(img)
 
     frames_per_second = len(request.files.getlist('image')) / 10
-    out = cv2.VideoWriter('project.mp4', cv2.VideoWriter_fourcc(*'MP4V'), frames_per_second, size)
+    video_path = 'project.mp4'
+    out = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'MP4V'), frames_per_second, size)
 
     for i in range(len(processed_img_array)) :
         out.write(processed_img_array[i])
 
     out.release()
+    prepare_video(video_path,   aspect_ratios=(1/1.9), max_duration=14.9,
+            min_size=(612, 612), max_size=(1080, 1920), save_path=video_path)
 
+    # TODO: set text a bit up from bottom
+    text = TextClip(text,fontsize=44, color='white').set_position(("center")).set_duration(2)
+    clip = VideoFileClip(video_path, audio=False)
+    final_clip = CompositeVideoClip([clip, text])
+    final_clip.write_videofile(video_path, fps=frames_per_second, )
+    
     return send_file('project.mp4')
 

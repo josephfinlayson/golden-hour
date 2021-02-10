@@ -33,11 +33,6 @@ SMALLEST_JPEG_B64 = """\
 EBEQCgwSExIQEw8QEBD/yQALCAABAAEBAREA/8wABgAQEAX/2gAIAQEAAD8A0s8g/9k=
 """
 
-file = werkzeug.datastructures.FileStorage(
-        stream=io.BytesIO(base64.b64decode(SMALLEST_JPEG_B64)),
-        filename="example image.jpg",
-        content_type="image/jpg",
-    )
 
 def test_image_to_video(client):
     f = open('./sample.jpg', 'rb') 
@@ -45,5 +40,5 @@ def test_image_to_video(client):
     f.seek(0)
     f2.seek(0)
 
-    response = client.post('/post-story', data=dict(image =[f, f2]))
+    response = client.post('/post-story', data=dict(image =[f, f2], text="test1"))
     assert response.headers['Content-Type'] == 'video/mp4'

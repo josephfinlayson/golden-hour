@@ -10,6 +10,8 @@ flask = "*"
 opencv-python = "*"
 numpy = "*"
 astral = "*"
+moviepy = "*"
+pillow = "*"
 
 [dev-packages]
 pytest = "*"
