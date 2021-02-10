@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1646518165926921f37f122b85f0dfdb37bc45c0dcb9b6da7b2b211f495d75e3"
+            "sha256": "3e3e262c32c32d66c18d044cdc8e0be03ecba89ea86866d7a84c4a3aa4d5b58b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,6 +16,14 @@
         ]
     },
     "default": {
+        "astral": {
+            "hashes": [
+                "sha256:b9ef70faf32e81a8ba174d21e8f29dc0b53b409ef035f27e0749ddc13cb5982a",
+                "sha256:e41d9967d5c48be421346552f0f4dedad43ff39a83574f5ff2ad32b6627b6fbe"
+            ],
+            "index": "pypi",
+            "version": "==2.2"
+        },
         "certifi": {
             "hashes": [
                 "sha256:1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c",
@@ -197,6 +205,13 @@
             ],
             "index": "pypi",
             "version": "==4.5.1.48"
+        },
+        "pytz": {
+            "hashes": [
+                "sha256:83a4a90894bf38e243cf052c8b58f381bfe9a7a483f6a9cab140bc7f702ac4da",
+                "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"
+            ],
+            "version": "==2021.1"
         },
         "requests": {
             "hashes": [

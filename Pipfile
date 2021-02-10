@@ -9,6 +9,7 @@ nptime = "*"
 flask = "*"
 opencv-python = "*"
 numpy = "*"
+astral = "*"
 
 [dev-packages]
 pytest = "*"
