@@ -13,7 +13,7 @@ COPY . .
   
 
 ARG imagemagic_config=/etc/ImageMagick-6/policy.xml
-RUN if [ -f $imagemagic_config ] ; then sed -i 's/<policy domain="path" rights="none" pattern="@*" \/>/<policy domain="path" rights="read|write" pattern="@*" \/>/g' $imagemagic_config ; else echo did not see file $imagemagic_config ; fi
+RUN if [ -f $imagemagic_config ] ; then sed -i 's/domain="path" rights="none"/domain="path" rights="read|write"/g' $imagemagic_config ; else echo did not see file $imagemagic_config ; fi
 
 CMD [ "python", "./app.py" ]
 
