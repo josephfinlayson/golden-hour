@@ -62,18 +62,21 @@ def post_story():
 
     frames_per_second = len(request.files.getlist('image')) / 10
     video_path = 'project.mp4'
-    out = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'MP4V'), frames_per_second, size)
 
-    for i in range(len(processed_img_array)) :
+    
+    out = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), frames_per_second, size)
+
+    for i in range(len(processed_img_array)):
         out.write(processed_img_array[i])
-
+        
     out.release()
-    prepare_video(video_path,   aspect_ratios=(1/1.9), max_duration=14.9,
-            min_size=(612, 612), max_size=(1080, 1920), save_path=video_path)
+
+    prepare_video(video_path,   aspect_ratios=(3/4), max_duration=14.9,
+            min_size=(612, 612), max_size=(1080, 1920), save_path='second.mp4')
 
     # TODO: set text a bit up from bottom
-    text = TextClip(text,fontsize=44, color='white').set_position(("center")).set_duration(2)
-    clip = VideoFileClip(video_path, audio=False)
+    text = TextClip(text,fontsize=44, color='white').set_position(("center")).set_duration(1)
+    clip = VideoFileClip('second.mp4', audio=False)
     final_clip = CompositeVideoClip([clip, text])
     final_clip.write_videofile(video_path, fps=frames_per_second )
     text.close()    
