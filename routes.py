@@ -75,7 +75,9 @@ def post_story():
     text = TextClip(text,fontsize=44, color='white').set_position(("center")).set_duration(2)
     clip = VideoFileClip(video_path, audio=False)
     final_clip = CompositeVideoClip([clip, text])
-    final_clip.write_videofile(video_path, fps=frames_per_second, )
-    
+    final_clip.write_videofile(video_path, fps=frames_per_second )
+    text.close()    
+    clip.close()
+    final_clip.close()
     return send_file('project.mp4')
 
