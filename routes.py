@@ -51,13 +51,7 @@ def create_opencv_image_from_stringio(img_stream, cv2_img_flag=0):
 
 @app.route('/post-story', methods = ['POST'])
 def post_story():
-    images = request.files.get('image')
     text = request.form.get('text')
-
-    name, ext = os.path.splitext(images.filename)
-
-    if ext not in ('.jpg','.jpeg'):
-        return 'File extension not allowed.'
 
     processed_img_array = []
     for file in request.files.getlist('image'):
