@@ -42,33 +42,31 @@ def index():
 
     return {"golden_hour": is_golden}
 
-def create_opencv_image_from_stringio(img_stream, cv2_img_flag=0):
-    img_stream.seek(0)
-    image_bytes = img_stream.read()  
-    decoded = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), -1)
-    return decoded
+def create_opencv_image_from_stringio(images):
+    for img_stream in images:
+        img_stream.seek(0)
+        image_bytes = img_stream.read()  
+        decoded = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), -1)
+        yield decoded
 
 
 @app.route('/post-story', methods = ['POST'])
 def post_story():
     text = request.form.get('text')
 
-    processed_img_array = []
-    for file in request.files.getlist('image'):
-        img = create_opencv_image_from_stringio(file)
-        height, width, layers = img.shape
-        size = (width,height)
-        processed_img_array.append(img)
-
-    frames_per_second = len(request.files.getlist('image')) / 10
+    image_list = request.files.getlist('image')
+    generator = create_opencv_image_from_stringio([image_list.pop()])
+    first_image = next(generator)
+    height, width, layers = first_image.shape
+    size = (width,height)
     video_path = 'project.mp4'
+    frames_per_second = len(image_list) / 12
 
-    
     out = cv2.VideoWriter(video_path, cv2.VideoWriter_fourcc(*'mp4v'), frames_per_second, size)
 
-    for i in range(len(processed_img_array)):
-        out.write(processed_img_array[i])
-        
+    for img in create_opencv_image_from_stringio(image_list):
+        out.write(img)
+
     out.release()
 
     prepare_video(video_path,   aspect_ratios=(3/4), max_duration=14.9,
@@ -83,4 +81,3 @@ def post_story():
     clip.close()
     final_clip.close()
     return send_file('project.mp4')
-
