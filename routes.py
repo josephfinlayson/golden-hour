@@ -73,7 +73,7 @@ def post_story():
             min_size=(612, 612), max_size=(1080, 1920), save_path='second.mp4')
 
     # TODO: set text a bit up from bottom
-    text = TextClip(text,fontsize=44, color='white').set_position(("center")).set_duration(1)
+    text = TextClip(text,fontsize=54, color='blue').set_position(("center")).set_duration(1)
     clip = VideoFileClip('second.mp4', audio=False)
     final_clip = CompositeVideoClip([clip, text])
     final_clip.write_videofile(video_path, fps=frames_per_second )
