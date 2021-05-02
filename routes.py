@@ -14,7 +14,6 @@ import cv2
 import numpy as np
 import glob
 from time import sleep
-from media import prepare_video
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 
