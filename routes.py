@@ -19,6 +19,7 @@ from requests.adapters import HTTPAdapter
 
 retry_strategy = Retry(
     total=3,
+    backoff_factor=1,
     status_forcelist=[429, 500, 502, 503, 504],
     method_whitelist=["HEAD", "GET", "OPTIONS"]
 )
