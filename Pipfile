@@ -20,3 +20,4 @@ python-githooks = "*"
 
 [requires]
 python_version = "3.8"
+

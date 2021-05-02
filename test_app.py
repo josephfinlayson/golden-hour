@@ -1,5 +1,5 @@
 from datetime import datetime
-from routes import is_golden_hour, index, post_story, app
+from routes import is_golden_hour, index, app
 import pytest
 import werkzeug
 import io
@@ -27,18 +27,3 @@ def test_index_test(client):
     g = list(answer).pop()
 
     assert g == 'golden_hour'
-
-SMALLEST_JPEG_B64 = """\
-/9j/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8Q
-EBEQCgwSExIQEw8QEBD/yQALCAABAAEBAREA/8wABgAQEAX/2gAIAQEAAD8A0s8g/9k=
-"""
-
-
-def test_image_to_video(client):
-    f = open('./sample.jpg', 'rb') 
-    f2 = open('./sample_2.jpg', 'rb') 
-    f.seek(0)
-    f2.seek(0)
-
-    response = client.post('/post-story', data=dict(image =[f, f2], text="test1"))
-    assert response.headers['Content-Type'] == 'video/mp4'
