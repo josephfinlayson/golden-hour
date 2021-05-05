@@ -9,7 +9,7 @@ import requests
 from astral.sun import sun
 from datetime import datetime, timedelta
 from nptime import nptime
-import os 
+import os
 import cv2
 import numpy as np
 import glob
@@ -31,25 +31,29 @@ http.mount("http://", adapter)
 
 app = Flask(__name__)
 
+
 def is_golden_hour(date_now, sunset, sunrise):
     sunset_end_range = sunset + timedelta(minutes=30)
     sunset_begin_range = sunset - timedelta(minutes=30)
-    
 
     sunrise_end_range = sunrise + timedelta(minutes=30)
     sunrise_begin_range = sunrise - timedelta(minutes=30)
-    
-    is_sunrise = sunrise_begin_range < date_now < sunrise_end_range 
-    is_sunset = sunset_begin_range < date_now < sunset_end_range 
+
+    is_sunrise = sunrise_begin_range < date_now < sunrise_end_range
+    is_sunset = sunset_begin_range < date_now < sunset_end_range
     return is_sunrise or is_sunset
 
 
 @app.route('/', )
 def index():
-    time_data = http.get("http://worldtimeapi.org/api/timezone/Europe/Berlin.json").json()
+    request_ip = request.remote_addr
+    source_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
+    pprint({'request_ip': request_ip, 'source_ip': source_ip})
+    time_data = http.get(
+        "http://worldtimeapi.org/api/timezone/Europe/Berlin.json").json()
     now = datetime.fromisoformat(time_data["utc_datetime"])
     city = LocationInfo("Berlin", "Germany", "Europe/Berlin", 52.52, 13.4050)
     s = sun(city.observer, date=now)
-    is_golden  = is_golden_hour(now,  s['sunrise'], s['sunset'])
+    is_golden = is_golden_hour(now,  s['sunrise'], s['sunset'])
 
     return {"golden_hour": is_golden}
