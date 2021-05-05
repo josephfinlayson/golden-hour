@@ -6,7 +6,7 @@ from moviepy.editor import CompositeVideoClip
 import logging
 from moviepy.video.io.VideoFileClip import VideoFileClip
 import requests
-from astral.sun import sun
+from astral.sun import sun, sunrise
 from datetime import datetime, timedelta
 from nptime import nptime
 import os
@@ -16,6 +16,8 @@ import glob
 from time import sleep
 from requests.packages.urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
+import pytz  # 3rd party: $ pip install pytz
+
 
 retry_strategy = Retry(
     total=3,
@@ -30,7 +32,8 @@ http.mount("http://", adapter)
 
 
 app = Flask(__name__)
-app.logger.setLevel(logging.DEBUG)
+app.logger.setLevel(logging.INFO)
+
 
 def is_golden_hour(date_now, sunset, sunrise):
     sunset_end_range = sunset + timedelta(minutes=30)
@@ -49,14 +52,20 @@ def index():
     request_ip = request.remote_addr
     source_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     app.logger.info({'request_ip': request_ip, 'source_ip': source_ip})
-    app.logger.info(request.headers)
 
-    time_data = http.get(
-        "http://worldtimeapi.org/api/timezone/Europe/Berlin.json").json()
-    now = datetime.fromisoformat(time_data["utc_datetime"])
+    u = datetime.utcnow()
+    # NOTE: it works only with a fixed utc offset
+    now = u.replace(tzinfo=pytz.utc)
 
     city = LocationInfo("Berlin", "Germany", "Europe/Berlin", 52.52, 13.4050)
     s = sun(city.observer, date=now)
     is_golden = is_golden_hour(now,  s['sunrise'], s['sunset'])
 
-    return {"golden_hour": is_golden}
+    return {"golden_hour": is_golden,
+            "berlin": {
+                "sunrise": s['sunrise'],
+                "sunset": s['sunset'],
+                "now": now,
+            }
+
+            }

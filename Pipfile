@@ -12,6 +12,7 @@ numpy = "*"
 astral = "*"
 moviepy = "*"
 pillow = "*"
+pytz = "*"
 
 [dev-packages]
 pytest = "*"
@@ -20,4 +21,3 @@ python-githooks = "*"
 
 [requires]
 python_version = "3.8"
-
