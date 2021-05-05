@@ -9,9 +9,6 @@ spec:
       containers:
         - name: golden-hour
           imagePullPolicy: Always
-          env:
-            - name: BOTTLE_ENV
-              value: production
           image: registry.digitalocean.com/unmanaged-registry/golden-hour:latest
           ports:
             - containerPort: 8080

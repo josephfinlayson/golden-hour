@@ -3,7 +3,7 @@ from astral import LocationInfo
 from pprint import pprint
 from moviepy.video.VideoClip import TextClip
 from moviepy.editor import CompositeVideoClip
-
+import logging
 from moviepy.video.io.VideoFileClip import VideoFileClip
 import requests
 from astral.sun import sun
@@ -30,7 +30,7 @@ http.mount("http://", adapter)
 
 
 app = Flask(__name__)
-
+app.logger.setLevel(logging.DEBUG)
 
 def is_golden_hour(date_now, sunset, sunrise):
     sunset_end_range = sunset + timedelta(minutes=30)
@@ -48,10 +48,11 @@ def is_golden_hour(date_now, sunset, sunrise):
 def index():
     request_ip = request.remote_addr
     source_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
-    pprint({'request_ip': request_ip, 'source_ip': source_ip})
+    app.logger.info({'request_ip': request_ip, 'source_ip': source_ip})
     time_data = http.get(
         "http://worldtimeapi.org/api/timezone/Europe/Berlin.json").json()
     now = datetime.fromisoformat(time_data["utc_datetime"])
+
     city = LocationInfo("Berlin", "Germany", "Europe/Berlin", 52.52, 13.4050)
     s = sun(city.observer, date=now)
     is_golden = is_golden_hour(now,  s['sunrise'], s['sunset'])
