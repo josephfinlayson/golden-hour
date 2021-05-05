@@ -49,6 +49,8 @@ def index():
     request_ip = request.remote_addr
     source_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
     app.logger.info({'request_ip': request_ip, 'source_ip': source_ip})
+    app.logger.info(request.headers)
+
     time_data = http.get(
         "http://worldtimeapi.org/api/timezone/Europe/Berlin.json").json()
     now = datetime.fromisoformat(time_data["utc_datetime"])
