@@ -1,4 +1,4 @@
-FROM python:3.9.5-slim
+FROM python:3.10.4-slim
 
 RUN apt-get update
 RUN apt-get install ffmpeg libsm6 libxext6 imagemagick  -y
