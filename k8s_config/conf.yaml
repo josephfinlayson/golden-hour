@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: golden-hour
 spec:
-  replicas: 1
   template:
     spec:
       containers:
@@ -12,6 +11,8 @@ spec:
           image: registry.digitalocean.com/unmanaged-registry/golden-hour:latest
           ports:
             - containerPort: 8080
+  replicas: 1
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -47,7 +48,6 @@ kind: Service
 metadata:
   name: golden-hour
 spec:
-  ext
   ports:
     - name: http
       port: 8005
