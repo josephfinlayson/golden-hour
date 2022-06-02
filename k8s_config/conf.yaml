@@ -28,7 +28,7 @@ metadata:
   name: golden-hour
 spec:
   rules:
-    - host: golden-hour.hobby-paas.cf
+    - host: golden-hour.josephfinlayson.com
       http:
         paths:
          - path: /
@@ -40,7 +40,7 @@ spec:
            pathType: Prefix
   tls:
   - hosts:
-      - golden-hour.hobby-paas.cf
+      - golden-hour.josephfinlayson.com
     secretName: letsencrypt-production
 ---
 apiVersion: v1
@@ -53,5 +53,5 @@ spec:
       port: 8005
       targetPort: 8080
   selector:
-    app: legal-tooling-prototype
+    app: golden-hour-service
   type: NodePort
