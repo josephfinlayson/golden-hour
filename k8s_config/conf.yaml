@@ -27,21 +27,22 @@ metadata:
       nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
   name: golden-hour
 spec:
+  ingressClassName: nginx
   rules:
     - host: golden-hour.josephfinlayson.com
       http:
         paths:
          - path: /
+           pathType: Prefix
            backend:
               service: 
                 name: golden-hour
                 port: 
                   number: 8005      
-           pathType: Prefix
   tls:
   - hosts:
       - golden-hour.josephfinlayson.com
-    secretName: letsencrypt-production
+    secretName: golden-hour-cert
 ---
 apiVersion: v1
 kind: Service
